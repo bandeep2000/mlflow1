@@ -1,9 +1,6 @@
 pipeline {
-    agent {
-         any
-        }
-    }
-    
+    agent any
+
     stages {
         stage('Build') {
             steps {
@@ -15,6 +12,6 @@ pipeline {
         }
         // Add more stages or steps as needed
     }
-    
+
     // Post-build actions or additional configurations can be added here
 }
