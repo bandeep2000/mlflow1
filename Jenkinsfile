@@ -1,6 +1,6 @@
 pipeline {
     //agent any
-    pipeline {
+    
     agent {
         docker { image 'python:3.8-slim' }
     }
