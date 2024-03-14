@@ -1,12 +1,11 @@
 pipeline {
-    //agent any
-    
-    agent {
-        docker { image 'python:3.8-slim' }
-    }
+    agent any // or specify the agent here if preferred
 
     stages {
         stage('Build') {
+            agent {
+                docker { image 'python:3.8-slim' }
+            }
             steps {
                 echo 'Starting the build process...'
                 sh 'python -m pytest .'
@@ -14,7 +13,7 @@ pipeline {
                 echo 'Build completed!'
             }
         }
-        // Add more stages or steps as needed
+        // Add more stages with labels as needed
     }
 
     // Post-build actions or additional configurations can be added here
