@@ -68,6 +68,7 @@ class LogisticRegr:
       self.load_dataset()
       self.create_training()
       self.initialize_train_model()
+      self.get_accuracy_score()
        
    # TODO create variables
    def mlflow_logging(self):
@@ -137,6 +138,8 @@ def main ():
     dir_model = lr.mlflow_logging()
     if_directory_exists(dir_model)
     print(dir_model)
+
+main()
 
 #TODO use logging method to print   
 
