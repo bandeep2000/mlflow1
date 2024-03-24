@@ -1,6 +1,10 @@
 import mlflow
 from mlflow.models import infer_signature
 
+"""
+Creates a trained model to classif
+"""
+import os
 import pandas as pd
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
@@ -12,6 +16,12 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 # start server if running locally - mlflow server --host 127.0.0.1 --port 8081
 MLFLOW_TRACK_URI = "http://127.0.0.1:8081"
 EXP_NAME = "MLflow Quickstart"
+
+def if_directory_exists(dir1):
+  
+    if not os.path.isdir(dir1):
+        raise Exception(f"dir {dir1} not found ")
+   
 
 class LogisticRegr:
    def __init__(self):
@@ -58,16 +68,18 @@ class LogisticRegr:
       self.load_dataset()
       self.create_training()
       self.initialize_train_model()
+      self.get_accuracy_score()
        
+   # TODO create variables
    def mlflow_logging(self):
        
         # Set our tracking server uri for logging
         # start server if running locally - mlflow server --host 127.0.0.1 --port 8081
         #TODO create excpetion if failed
-        mlflow.set_tracking_uri(uri=MLFLOW_TRACK_URI)
+        #mlflow.set_tracking_uri(uri=MLFLOW_TRACK_URI)
 
         # Create a new MLflow Experiment
-        mlflow_exp = mlflow.set_experiment("MLflow Quickstart")
+        mlflow_exp = mlflow.set_experiment(EXP_NAME)
 
         #self.mlflow_exp_id =  mlflow_exp.experiment_id
         #print(exp.experiment_id)
@@ -76,7 +88,6 @@ class LogisticRegr:
         with mlflow.start_run():
             # Log the hyperparameters
             mlflow.log_params(self.params)
-            #mlflow.log_params("blah")
 
             # Log the loss metric
             mlflow.log_metric("accuracy", self.accurracy)
@@ -91,7 +102,7 @@ class LogisticRegr:
             # Log the model
             model_info = mlflow.sklearn.log_model(
                 sk_model=self.lr,
-                # make this a variable
+                # TODO make this a variable
                 artifact_path="iris_model",
                 signature=signature,
                 input_example=self.X_train,
@@ -111,14 +122,39 @@ class LogisticRegr:
             model_info.artifact_path
             'iris_model'
             """
-            mod_path = "./mlartifacts/" + mlflow_exp.experiment_id + "/" + model_info.run_id + "/" + "artifacts" + "/" + model_info.artifact_path
+            #mod_path = "./mlartifacts/" + mlflow_exp.experiment_id + "/" + \
+            #   model_info.run_id + "/" + "artifacts" + "/" + model_info.artifact_path
+            mod_path = "./mlruns/" + mlflow_exp.experiment_id + "/" + \
+               model_info.run_id + "/" + "artifacts" + "/" + model_info.artifact_path
             return mod_path
 
-   
-lr = LogisticRegr()
-lr.start_training()
-print(lr.get_accuracy_score())
-print(lr.mlflow_logging())
+
+
+def main ():
+
+    lr = LogisticRegr()
+    lr.start_training()
+    # model directory
+    dir_model = lr.mlflow_logging()
+    if_directory_exists(dir_model)
+    print(dir_model)
+
+main()
+
+#TODO use logging method to print   
+
+
+def test_dir_exists():
+    if_directory_exists("blah")
+def test_data_clean():
+    """ Validates input data passed is correct"""
+def test_model():
+
+  lr = LogisticRegr()
+  #lr.start_training()
+  #print(lr.get_accuracy_score())
+  #assert lr.get_accuracy_score() > 0.8
+  #print(lr.mlflow_logging())
 
 
 
