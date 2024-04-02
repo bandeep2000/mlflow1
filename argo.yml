@@ -1,7 +1,8 @@
+# you should keep this in a different repo than helm chart rep
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: my-app
+  name: mlapp1
   namespace: argocd
 spec:
   project: default
